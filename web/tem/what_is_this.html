@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>這是什麼</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .back-wrapper {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+        .back-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .back-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #3498db;
+        }
+        .container {
+            max-width: 800px;
+            margin: 100px auto 20px auto;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .container a {
+            text-decoration: none;
+            color: #3498db;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .container a:hover {
+            color: #2980b9;
+        }
+        .title {
+            font-size: 28px;
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .content {
+            font-size: 18px;
+            color: #555555;
+            line-height: 1.6;
+            text-align: left;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="back-wrapper" onclick="goBack()">
+        <div class="back-icon">
+            ⬅
+        </div>
+    </div>
+    <div class="container">
+        <div class="title" id="pageTitle">這是什麼</div>
+        <div class="content" id="pageContent">
+            <p>gsat.lab.best 是一款提供學測篩選標準、篩選倍率、校系、歷史訊息等...的查詢系統，我們提供更便捷的搜尋方式——直接搜尋，也提供加入清單，方便使用者日後調閱。</p>
+            <p>gsat.lab.best 希望透過整合資訊，免去使用者飽受查詢歷年資料之苦，透過線上存取/儲存，達成去紙本化和隨時存取。</p>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

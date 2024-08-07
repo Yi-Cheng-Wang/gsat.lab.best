@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隱私權同意頁面</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px 50px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 25px;
+            color: #333333;
+        }
+        .policy {
+            font-size: 16px;
+            color: #555555;
+            text-align: left;
+            height: 150px;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        label {
+            font-size: 16px;
+            color: #555555;
+        }
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: #ffffff;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="container">
+        <h1>隱私權同意</h1>
+        <p>
+            您的隱私對我們來說非常重要。我們僅會收集必要的個人資料，並且不會在未經您同意的情況下將您的資料提供給第三方。請仔細閱讀以下隱私政策，並在同意後勾選下方的同意框。
+        </p>
+        <div class="policy">
+            <p>
+                - 我們會收集您的聯絡資訊以提供更好的服務。<br>
+                - 您的資料將被保密，並僅用於指定用途。<br>
+                - 您有權隨時查看、更正或刪除您的個人資料。<br>
+                - 我們不會使用您的資料進行市場分析，但可能用於改進我們的服務。<br>
+                - 您的資料不會被用於個性化廣告，更不會與第三方分享您的個人識別資訊。<br>
+                - 我們會定期審查我們的隱私政策，以確保您的資料安全。<br>
+                - 如果您有任何隱私方面的問題，請隨時與我們聯繫。
+                <!-- 可以添加更多隱私政策內容 -->
+            </p>
+        </div>
+        <form action="/privacy" method="post" onsubmit="return showLoading()">
+            <label>
+                <input type="checkbox" name="consent" required> 我同意隱私政策
+            </label><br><br>
+            <input type="submit" value="提交">
+        </form>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById("loadingOverlay").style.display = "flex";
+        }
+    </script>
+</body>
+</html>
