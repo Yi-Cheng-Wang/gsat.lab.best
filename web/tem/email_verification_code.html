@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>郵箱驗證</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e4e4e4;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333333;
+            font-size: 26px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content p {
+            margin: 0 0 20px;
+            color: #555555;
+            font-size: 18px;
+        }
+        .content a {
+            display: inline-block;
+            padding: 12px 70px;
+            color: #ffffff;
+            background-color: #3498db;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .content a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>郵箱驗證</h1>
+        </div>
+        <div class="content">
+            <p>請點擊以下按鈕驗證您的<br>郵箱地址：</p>
+            <a href="http://gsat.lab.best/verify_email?token={{.Token}}">驗證郵箱</a>
+        </div>
+    </div>
+</body>
+</html>

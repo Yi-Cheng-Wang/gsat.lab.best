@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>113年個人申請暨歷史資料綜整 - gsat.lab.best</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .back-wrapper {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+        .back-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .back-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #3498db;
+        }
+        #title {
+            font-size: 28px;
+            color: #333333;
+            margin-top: 100px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .results {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+        }
+        .result-item {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+        }
+        .result-item h3 {
+            margin: 0;
+            color: #333333;
+            font-size: 20px;
+        }
+        .result-item p {
+            margin: 5px 0;
+            color: #555555;
+            font-size: 16px;
+        }
+        .load-more-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 20px auto;
+            display: block;
+        }
+        .load-more-button:hover {
+            background-color: #2980b9;
+        }
+        .subject-table {
+            width: calc(85% - 30px);
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .subject-table th, .subject-table td {
+            padding: 8px;
+            border: 1px solid #cccccc;
+            text-align: left;
+        }
+        .subject-table th {
+            background-color: #f9f9f9;
+        }
+        .add-list-button, .view-more-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-list-button:hover, .view-more-button:hover {
+            background-color: #2980b9;
+        }
+        .add-list-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .view-more-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        .dialog {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .dialog-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 18px;
+        }
+        .confirm-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .confirm-button:hover {
+            background-color: #2980b9;
+        }
+        #description {
+            text-align: center;
+        }
+
+        /* Media Queries for different screen sizes */
+        @media (max-width: 768px) {
+            .result-item h3 {
+                font-size: 16px;
+            }
+            .result-item p {
+                font-size: 12px;
+            }
+            .load-more-button {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            .add-list-button, .view-more-button {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+            .subject-table {
+                font-size: 12px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="back-wrapper" onclick="goBack()">
+        <div class="back-icon">
+            ⬅
+        </div>
+    </div>
+    <div id="customDialog" class="dialog">
+        <div class="dialog-content">
+            <p id="dialogMessage"></p>
+            <button class="confirm-button" onclick="closeDialog()">確認</button>
+        </div>
+    </div>    
+    
+    <div class="results">
+        <div id="title" class="result-item">
+            我的清單
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div id="description" class="result-item">
+            <font color="#555555">
+            正在載入中
+            </font>
+        </div>
+    </div>
+    <button class="load-more-button" id="loadMoreButton" style="display:none;" onclick="loadMore()">載入更多</button>
+
+    <script>
+        let currentPage = 1;
+
+        function getMyList() {
+            currentPage = 1;
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('loadMoreButton').style.display = 'none';
+            loadMore();
+        }
+
+        function loadMore() {
+            const url = `/get_my_list?page=${currentPage}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsContainer = document.getElementById('results');
+                    
+                    if (data === null && currentPage === 1) {
+                        resultsContainer.innerHTML = '<div id="description" class="result-item"><font color="#555555">您尚未加入任何校系。</font></div>';
+                    } else if (data === null){
+                        const resultItem = document.createElement('div');
+                        resultItem.innerHTML = `
+                                <div id="description" class="result-item"><font color="#555555">已經到底了。</font></div>
+                            `;
+                        document.getElementById('loadMoreButton').style.display = 'none';
+                        resultsContainer.appendChild(resultItem);
+                    } else {
+                        data.forEach(item => {
+                            const resultItem = document.createElement('div');
+                            resultItem.className = 'result-item';
+                            
+                            const subjects = JSON.parse(item.subject);
+                            const criteria = JSON.parse(item.subject_criteria);
+                            
+                            let subjectCriteriaHTML = '<table class="subject-table">';
+                            subjectCriteriaHTML += '<tr>';
+                            subjects.forEach(subject => {
+                                subjectCriteriaHTML += `<th>${subject}</th>`;
+                            });
+                            subjectCriteriaHTML += '</tr><tr>';
+                            criteria.forEach(criterion => {
+                                subjectCriteriaHTML += `<td>${criterion}</td>`;
+                            });
+                            subjectCriteriaHTML += '</tr></table>';
+                            
+                            let combinedName = item.combined_name;
+                            if (window.innerWidth <= 768) {
+                                combinedName = combinedName.replace(/ /g, '<br>');
+                            }
+                            
+                            resultItem.innerHTML = `
+                                <button class="add-list-button" onclick="removeFromList('${combinedName}')">移除校系</button>
+                                <h3>${combinedName}</h3>
+                                <p>代碼: ${item.code}</p>
+                                ${subjectCriteriaHTML}
+                                <button class="view-more-button" onclick="viewMore('${combinedName}')">詳細資料</button>
+                            `;
+                            resultsContainer.appendChild(resultItem);
+                        });
+                        document.getElementById('loadMoreButton').style.display = 'block';
+                        currentPage++;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                search();
+            }
+        }
+
+        function removeFromList(combinedName) {
+            fetch(`/remove_from_list?school_name=${combinedName}`)
+                .then(response => response.text())
+                .then(text => {
+                    if (text.includes('School name removed successfully')) {
+                        showDialog('移除校系成功');
+                    } else {
+                        showDialog('移除校系失敗：\n' + text);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showDialog('移除校系時發生錯誤');
+                });
+        }
+
+        function showDialog(message) {
+            document.getElementById('dialogMessage').innerText = message;
+            document.getElementById('customDialog').style.display = 'flex';
+        }
+
+        function closeDialog() {
+            document.getElementById('customDialog').style.display = 'none';
+            window.location.href="/list"
+        }
+
+        function viewMore(combinedName) {
+            window.location.href="/detail?combined_name="+combinedName
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        getMyList();
+    </script>
+</body>
+</html>

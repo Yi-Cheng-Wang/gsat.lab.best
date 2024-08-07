@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.CombinedName}}</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #333333;
+        }
+        .header p {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #555555;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            font-size: 22px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f9f9f9;
+            color: #333333;
+        }
+        .multi-column {
+            display: flex;
+        }
+        .multi-column div {
+            flex: 1;
+            border-right: 1px solid #ccc;
+            padding: 0 5px;
+        }
+        .multi-column div:last-child {
+            border-right: none;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #555555;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .button {
+            margin-bottom: 10px;
+            padding: 18px 36px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #ffffff;
+            font-size: 16px;
+        }
+        .back-button {
+            background-color: #3498db;
+        }
+        .save-button {
+            background-color: #c03baa;
+            margin-left: 10px;
+        }
+        .side-by-side-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .side-by-side-container .section {
+            flex-grow: 1;
+        }
+        .side-by-side-container .section:first-child {
+            flex: 1;
+        }
+        .side-by-side-container .section:last-child {
+            flex: 2;
+        }
+        .side-by-side-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .header p {
+                font-size: 16px;
+            }
+            .section h2 {
+                font-size: 20px;
+            }
+            th, td {
+                padding: 8px;
+            }
+            .button {
+                padding: 18px 36px;
+                font-size: 14px;
+            }
+            .side-by-side-container{
+                display:block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                margin: 15px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .header p {
+                font-size: 14px;
+            }
+            .section h2 {
+                font-size: 18px;
+            }
+            th, td {
+                padding: 6px;
+            }
+            .button {
+                padding: 13px 26px;
+                font-size: 14px;
+            }
+            .multi-column {
+                flex-direction: column;
+            }
+            .multi-column div {
+                border-right: none;
+                border-bottom: 1px solid #ccc;
+                padding: 5px 0;
+            }
+            .multi-column div:last-child {
+                border-bottom: none;
+            }
+            .side-by-side-container{
+                display:block;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="header-title"></h1>
+            <p id="data-type"></p>
+            <p id="quota"></p>
+            <p id="date"></p>
+        </div>
+
+        <div class="section">
+            <h2>科目及其檢定、倍率、採計方式、比例</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>科目</th>
+                        <th>檢定</th>
+                        <th>篩選倍率</th>
+                        <th>採計方式</th>
+                    </tr>
+                </thead>
+                <tbody id="subjects"></tbody>
+            </table>
+            <p id="score-proportion"></p>
+        </div>
+
+        <div class="section">
+            <h2>指定項目及其檢定、比例</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>指定項目</th>
+                        <th>檢定</th>
+                        <th>比例</th>
+                    </tr>
+                </thead>
+                <tbody id="items"></tbody>
+            </table>
+        </div>
+
+        <div class="side-by-side-container">
+            <div class="section">
+                <h2>同分參酌之順序</h2>
+                <ul id="excessive-screening"></ul>
+            </div>
+
+            <div class="section">
+                <h2>招生名額及正/備取情況</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>招生名額</th>
+                            <th>正/備取情況</th>
+                        </tr>
+                    </thead>
+                    <tbody id="candidates-info"></tbody>
+                </table>
+            </div>
+        </div>            
+    </div>
+
+    <div class="button-container">
+        <button class="button back-button" onclick="goBack()">返回</button>
+    </div>
+
+    <script>
+        const data = JSON.parse({{.FullJSON | printf "%+v"}});
+        const year_info = "{{.CurrentYear}},{{.LastYear}},{{.TwoYearsAgo}},";
+
+        const headerTitle = document.getElementById('header-title');
+        const firstYearData = data[0];
+        headerTitle.innerText = `${firstYearData.school_name} ${firstYearData.department_name}`;
+        document.getElementById('quota').innerText = `招生名額: ${firstYearData.enrollment_quota}`;
+        document.getElementById('date').innerText = `篩選日期: ${firstYearData.screening_date}`;
+
+        const subjectsTable = document.getElementById('subjects');
+        data[0].subject.forEach((subject, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${subject}</td>
+                <td>
+                    <div class="multi-column">
+                        <div>${data[0].subject_criteria[index]}</div>
+                        <div>${data[1].subject_criteria[index]}</div>
+                        <div>${data[2].subject_criteria[index]}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="multi-column">
+                        <div>${data[0].subject_magnification[index]}</div>
+                        <div>${data[1].subject_magnification[index]}</div>
+                        <div>${data[2].subject_magnification[index]}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="multi-column">
+                        <div>${data[0].subject_scoring[index]}</div>
+                        <div>${data[1].subject_scoring[index]}</div>
+                        <div>${data[2].subject_scoring[index]}</div>
+                    </div>
+                </td>
+            `;
+            subjectsTable.appendChild(row);
+        });
+        document.getElementById('score-proportion').innerText = `學科能力測驗佔比: ${data.map(d => d.subject_score_proportion !== "" ? d.subject_score_proportion : "--").join(' / ')}`;
+
+        const itemsTable = document.getElementById('items');
+        data[0].specify_items.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item}</td>
+                <td>
+                    <div class="multi-column">
+                        <div>${data[0].specify_items_criteria[index]}</div>
+                        <div>${data[1].specify_items_criteria[index]}</div>
+                        <div>${data[2].specify_items_criteria[index]}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="multi-column">
+                        <div>${data[0].specify_items_score_proportion[index]}</div>
+                        <div>${data[1].specify_items_score_proportion[index]}</div>
+                        <div>${data[2].specify_items_score_proportion[index]}</div>
+                    </div>
+                </td>
+            `;
+            itemsTable.appendChild(row);
+        });
+
+        const excessiveScreeningList = document.getElementById('excessive-screening');
+        data[0].excessive_screening.forEach(screening => {
+            const listItem = document.createElement('li');
+            listItem.innerText = screening;
+            excessiveScreeningList.appendChild(listItem);
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function populateYearInfo() {
+            const dataTypeElement = document.getElementById('data-type');
+            var formattedYearInfo = year_info.split('_year,');
+
+            var i = -1;
+            let yearInfo = data.map(d => {
+                i++;
+                if (d.subject_score_proportion === '') {
+                    return 'No Data';
+                } else {
+                    return formattedYearInfo[i];
+                }
+            }).join(' / ');
+
+            if (yearInfo.endsWith('/')) {
+                yearInfo = yearInfo.slice(0, -1);
+            }
+
+            dataTypeElement.innerText = `資料樣態: ${yearInfo} (左⇨右, 上⇨下)`;
+        }
+
+        const candidatesInfo = document.getElementById('candidates-info');
+        const candidatesInfoRow = document.createElement('tr');
+        candidatesInfoRow.innerHTML = `
+            <td>
+                <div class="multi-column">
+                    <div>${data[0].enrollment_quota == '' ? "--" : data[0].enrollment_quota}</div>
+                    <div>${data[1].enrollment_quota == '' ? "--" : data[1].enrollment_quota}</div>
+                    <div>${data[2].enrollment_quota == '' ? "--" : data[2].enrollment_quota}</div>
+                </div>
+            </td>
+            <td>
+                <div class="multi-column">
+                    <div>${data[0].candidates == '' ? "--" : data[0].candidates == '--' ? "具組別" : data[0].candidates}</div>
+                    <div>${data[1].candidates == '' ? "--" : data[1].candidates == '--' ? "具組別" : data[1].candidates}</div>
+                    <div>${data[2].candidates == '' ? "--" : data[2].candidates == '--' ? "具組別" : data[2].candidates}</div>
+                </div>
+            </td>
+        `;
+        candidatesInfo.appendChild(candidatesInfoRow);
+
+        populateYearInfo();
+    </script>
+</body>
+</html>

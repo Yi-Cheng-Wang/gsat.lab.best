@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="113年個人申請, 113個申, 個人申請, 個申, 學測歷史資料整理, 學測歷史資料, 學測資料, 學測成績比對, 學測歷史成績, 校系分則, 校系分則歷史, 校系分則資料">
+    <meta name="description" content="113年個人申請暨歷史資料綜整平台，提供詳細的校系分則歷史資料、學測歷史資料整理及個人申請成績比對。">
+    <meta name="author" content="gsat.lab.best">
+    <meta property="og:title" content="113年個人申請暨歷史資料綜整 - gsat.lab.best">
+    <meta property="og:description" content="提供113年個人申請與學測歷史資料綜整服務，查詢校系分則資訊。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gsat.lab.best">
+    <title>113年個人申請暨歷史資料綜整 - gsat.lab.best</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #ffffff;
+            padding: 10px 50px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+            text-decoration: none;
+        }
+        .menu-icon {
+            font-size: 30px;
+            cursor: pointer;
+            color: #3498db;
+        }
+        .side-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: #ffffff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .side-menu div {
+            width: 250px;
+        }
+        .side-menu a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333333;
+            display: block;
+            transition: 0.3s;
+        }
+        .side-menu a:hover {
+            color: #3498db;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 36px;
+            cursor: pointer;
+            color: #333333;
+        }
+        .close-btn:hover {
+            color: #cccccc;
+        }
+        .search-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            display: flex;
+        }
+        .search-bar {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #fafafa;
+        }
+        .search-button {
+            display: none; /* Hide search button */
+        }
+        .results {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+        }
+        .result-item {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+        }
+        .result-item h3 {
+            margin: 0;
+            color: #333333;
+            font-size: 20px;
+        }
+        .result-item p {
+            margin: 5px 0;
+            color: #555555;
+            font-size: 16px;
+        }
+        .load-more-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 20px auto;
+            display: block;
+        }
+        .load-more-button:hover {
+            background-color: #2980b9;
+        }
+        .subject-table {
+            width: calc(85% - 30px);
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .subject-table th, .subject-table td {
+            padding: 8px;
+            border: 1px solid #cccccc;
+            text-align: left;
+        }
+        .subject-table th {
+            background-color: #f9f9f9;
+        }
+        .add-list-button, .view-more-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-list-button:hover, .view-more-button:hover {
+            background-color: #2980b9;
+        }
+        .add-list-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .view-more-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        .tag {
+            display: none;
+        }
+        .dialog {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .dialog-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 18px;
+        }
+        .confirm-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .confirm-button:hover {
+            background-color: #2980b9;
+        }
+        #description {
+            text-align: center;
+        }
+
+        /* Media Queries for different screen sizes */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 20px;
+            }
+            .search-bar {
+                font-size: 14px;
+            }
+            .menu-icon {
+                font-size: 25px;
+            }
+            .result-item h3 {
+                font-size: 16px;
+            }
+            .result-item p {
+                font-size: 12px;
+            }
+            .load-more-button {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            .add-list-button, .view-more-button {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+            .subject-table {
+                font-size: 12px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="tag">
+        <h1>113年個人申請</h1>
+            <h2>113個申</h2>
+            <h2>個人申請</h2>
+                <h3>個申</h3>
+        <h1>學測歷史資料整理</h1>
+            <h2>學測歷史資料</h2>
+                <h3>學測資料</h3>
+            <h2>學測成績比對</h2>
+                <h3>學測歷史成績</h3>
+        <h1>校系分則</h1>
+            <h2>校系分則歷史</h2>
+            <h2>校系分則資料</h2>
+    </div>
+    <div class="header">
+        <a href="/" class="logo">個人申請暨歷史資料查詢</a>
+        <span class="menu-icon" onclick="openMenu()"><i class="fas fa-bars"></i></span>
+    </div>
+    
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" role="button" onclick="closeMenu()">&times;</span>
+        <div><a href="/what_is_this">這是什麼</a></div>
+        <div><a href="/about_us">關於我們</a></div>
+        <div><a href="/contact_us">聯絡我們</a></div>
+        {{if .Login}}
+        <div><a href="/list">我的清單</a></div>
+        <div><a href="/logout">登出</a></div>
+        {{else}}
+        <div><a href="/login">我的清單</a></div>
+        <div><a href="/login">登入</a></div>
+        {{end}}
+    </div>
+
+    <div id="announcement-container" class="dialog">
+        <div class="dialog-content">
+            <p id="announcementMessage"></p>
+            <button class="confirm-button" onclick="closeAnnouncement()">確認</button>
+        </div>
+    </div>
+
+    <div id="customDialog" class="dialog">
+        <div class="dialog-content">
+            <p id="dialogMessage"></p>
+            <button class="confirm-button" onclick="closeDialog()">確認</button>
+        </div>
+    </div>    
+    
+    <div style="text-align: center;">
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchInput" placeholder="在這裡輸入搜尋內容" onkeydown="handleKeyPress(event)">
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div id="description" class="result-item">
+            <font color="#555555">
+            搜尋時，可以用校系代碼或名稱搜尋。<br>
+            名稱可以縮寫，底下是一些搜尋範例：<br><br>
+            「　　　　　　　　　　　　　　　　　​<br>
+            004442、成大資工、資工<br>
+            　　　　　　　　　　　　　　　　　」<br><br>
+            我們會持續改進搜尋演算法，如搜尋不<br>
+            到正確校系，嘗試輸入更完整再搜尋！
+            </font>
+            <br><br>
+            <font color="#B60000">
+            本系統之任何結果皆不構成任何建議，<br>
+            謹慎選擇個人校系，為個人選擇負責！<br><br>
+            本系統之任何查詢結果皆僅供參考，若<br>
+            與簡章內容不符，請以正式簡章為準。
+            </font>
+        </div>
+    </div>
+    <button class="load-more-button" id="loadMoreButton" style="display:none;" onclick="loadMore()">載入更多</button>
+
+    <script>
+        function openMenu() {
+            document.getElementById("sideMenu").style.width = "250px";
+        }
+
+        function closeMenu() {
+            document.getElementById("sideMenu").style.width = "0";
+        }
+
+        let currentPage = 1;
+        let currentKeyword = '';
+
+        function search() {
+            currentPage = 1;
+            currentKeyword = document.getElementById('searchInput').value;
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('loadMoreButton').style.display = 'none';
+            loadMore();
+        }
+
+        function loadMore() {
+            const url = `/search?keyword=${currentKeyword}&page=${currentPage}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsContainer = document.getElementById('results');
+                    
+                    if (data === null && currentPage === 1) {
+                        resultsContainer.innerHTML = '<div id="description" class="result-item"><font color="#555555">找不到校系，請輸入正確校系代碼，或是更精確的名稱。</font></div>';
+                    } else if (data === null){
+                        const resultItem = document.createElement('div');
+                        resultItem.innerHTML = `
+                                <div id="description" class="result-item"><font color="#555555">已經到底了。</font></div>
+                            `;
+                        document.getElementById('loadMoreButton').style.display = 'none';
+                        resultsContainer.appendChild(resultItem);
+                    } else {
+                        data.forEach(item => {
+                            const resultItem = document.createElement('div');
+                            resultItem.className = 'result-item';
+                            
+                            const subjects = JSON.parse(item.subject);
+                            const criteria = JSON.parse(item.subject_criteria);
+                            
+                            let subjectCriteriaHTML = '<table class="subject-table">';
+                            subjectCriteriaHTML += '<tr>';
+                            subjects.forEach(subject => {
+                                subjectCriteriaHTML += `<th>${subject}</th>`;
+                            });
+                            subjectCriteriaHTML += '</tr><tr>';
+                            criteria.forEach(criterion => {
+                                subjectCriteriaHTML += `<td>${criterion}</td>`;
+                            });
+                            subjectCriteriaHTML += '</tr></table>';
+                            
+                            let combinedName = item.combined_name;
+                            if (window.innerWidth <= 768) {
+                                combinedName = combinedName.replace(/ /g, '<br>');
+                            }
+                            
+                            resultItem.innerHTML = `
+                                <button class="add-list-button" onclick="addToList('${combinedName}')">加入清單</button>
+                                <h3>${combinedName}</h3>
+                                <p>代碼: ${item.code}</p>
+                                ${subjectCriteriaHTML}
+                                <button class="view-more-button" onclick="viewMore('${combinedName}')">詳細資料</button>
+                            `;
+                            resultsContainer.appendChild(resultItem);
+                        });
+                        document.getElementById('loadMoreButton').style.display = 'block';
+                        currentPage++;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                search();
+            }
+        }
+
+        function addToList(combinedName) {
+            fetch(`/add_to_list?school_name=${combinedName}`)
+                .then(response => response.text())
+                .then(text => {
+                    if (text.includes('School name added successfully')) {
+                        showDialog('加入清單成功');
+                    } else {
+                        showDialog('加入清單失敗：\n' + text);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showDialog('加入清單時發生錯誤');
+                });
+        }
+
+        function showDialog(message) {
+            document.getElementById('dialogMessage').innerText = message;
+            document.getElementById('customDialog').style.display = 'flex';
+        }
+
+        function closeDialog() {
+            document.getElementById('customDialog').style.display = 'none';
+        }
+
+        function viewMore(combinedName) {
+            window.location.href="/detail?combined_name="+combinedName
+        }
+
+        function loadAnnouncement() {
+            const announcementData = {{.AnnouncementMessage}};
+            
+            if (announcementData) {
+                let announcementsHTML = '';
+                announcementData.forEach((announcement, index) => {
+                    announcementsHTML += `${announcement}<br>`;
+                });
+                document.getElementById('announcementMessage').innerHTML = announcementsHTML;
+                document.getElementById('announcement-container').style.display = 'flex';
+            }
+        }
+
+        function closeAnnouncement() {
+            document.getElementById('announcement-container').style.display = 'none';
+        }
+
+        window.onload = function() {
+            loadAnnouncement();
+        };
+    </script>
+</body>
+</html>
