@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .admin-panel {
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+            border-radius: 6px;
+        }
+        .admin-panel h2 {
+            margin: 0;
+            color: #333333;
+            font-size: 24px;
+        }
+        .admin-panel .section {
+            margin: 20px 0;
+        }
+        .admin-panel .section h3 {
+            margin: 0;
+            color: #333333;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #3498db;
+            color: #ffffff;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-panel .section h3:hover {
+            background-color: #2980b9;
+        }
+        .admin-panel .section-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+        .admin-panel .section-content textarea {
+            width: 100%;
+            height: 100px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .admin-panel .section-content button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .admin-panel .section-content button:hover {
+            background-color: #2980b9;
+        }
+        .toggle-icon {
+            font-size: 16px;
+        }
+        .admin-panel .message {
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+        .dialog {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .dialog-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 18px;
+        }
+        .confirm-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .confirm-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="customDialog" class="dialog">
+        <div class="dialog-content">
+            <p id="dialogMessage"></p>
+            <button class="confirm-button" onclick="closeDialog()">確認</button>
+        </div>
+    </div>
+
+    <div class="admin-panel">
+        <h2>管理面板</h2>
+        <div class="section">
+            <h3 onclick="toggleSection(this)">
+                修改公告
+                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+            </h3>
+            <div class="section-content">
+                <textarea id="announcementContent" placeholder="請輸入公告內容..."></textarea>
+                <button onclick="saveAnnouncement()">保存公告</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon i');
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                content.style.display = "none";
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        function saveAnnouncement() {
+            const content = document.getElementById('announcementContent').value;
+
+            fetch('/admin/save_announcement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ announcement: content }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showDialog("公告已成功保存！\n"+data.message);
+                } else {
+                    showDialog("公告保存失敗！\n"+data.message);
+                }
+            })
+            .catch(error => {
+                showDialog("公告保存失敗！\n"+error);
+            });
+        }
+
+        function showDialog(message) {
+            document.getElementById('dialogMessage').innerText = message;
+            document.getElementById('customDialog').style.display = 'flex';
+        }
+
+        function closeDialog() {
+            document.getElementById('customDialog').style.display = 'none';
+        }
+
+        function loadAnnouncement() {
+            const announcementData = {{.AnnouncementMessage}};
+            
+            if (announcementData) {
+                let announcementsText = '';
+                announcementData.forEach((announcement, index) => {
+                    announcementsText += `${announcement}\n`;
+                });
+                document.getElementById('announcementContent').value = announcementsText;
+            }
+        }
+
+        window.onload = function() {
+            loadAnnouncement();
+        };
+    </script>
+</body>
+</html>

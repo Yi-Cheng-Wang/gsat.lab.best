@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"web/admin"
 	"web/dbconnector"
 	"web/login"
 	"web/registration"
@@ -36,6 +37,7 @@ func main() {
 	dbconnector.InitDB(*dbUser, *dbPassword, *dbHost, *dbPort, *dbName)
 
 	// Initialize database connection
+	admin.InitDB(dbconnector.GetDB())
 	login.InitDB(dbconnector.GetDB())
 	registration.InitDB(dbconnector.GetDB())
 	search.InitDB(dbconnector.GetDB(), *currentYearTable, *lastYearTable, *twoYearsAgoTable)
@@ -46,6 +48,8 @@ func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/about_us", aboutUsHandler)
 	http.HandleFunc("/add_score", addScoreHandler)
+	http.HandleFunc("/admin", admin.AdminPanelHandler)
+	http.HandleFunc("/admin/save_announcement", admin.SaveAnnouncementHandler)
 	http.HandleFunc("/contact_us", contactUsHandler)
 	http.HandleFunc("/detail", search.DetailHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
