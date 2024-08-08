@@ -9,7 +9,8 @@ CREATE TABLE users (
     salt VARCHAR(32) NOT NULL,
     agree_privacy BOOLEAN NOT NULL,
     email_verified BOOLEAN NOT NULL DEFAULT FALSE,
-    school_list TEXT
+    school_list TEXT,
+    permit INT DEFAULT 1
 );
 
 CREATE TABLE system_secrets (
