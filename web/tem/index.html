@@ -334,8 +334,14 @@
 
         let currentPage = 1;
         let currentKeyword = '';
+        let lastSearchTime = 0;
 
         function search() {
+            const currentTime = Date.now();
+            if (currentTime - lastSearchTime < 1000) {
+                return;
+            }
+            lastSearchTime = currentTime;
             currentPage = 1;
             currentKeyword = document.getElementById('searchInput').value;
             document.getElementById('results').innerHTML = '';
