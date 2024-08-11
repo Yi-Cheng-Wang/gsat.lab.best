@@ -350,10 +350,16 @@
         }
 
         function loadMore() {
-            const url = `/search?keyword=${currentKeyword}&page=${currentPage}`;
+            const url = `/api/search?keyword=${currentKeyword}&page=${currentPage}`;
             
             fetch(url)
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 429) {
+                        document.getElementById('results').innerHTML = '<div id="description" class="result-item"><font color="#B60000">您所在的 ip 流量過大，已採取限制流量 10 秒。</font></div>';
+                        throw new Error('Too Many Requests');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     const resultsContainer = document.getElementById('results');
                     
@@ -440,7 +446,7 @@
         }
 
         function viewMore(combinedName) {
-            window.location.href="/detail?combined_name="+combinedName
+            window.location.href="/api/detail?combined_name="+combinedName
         }
 
         function loadAnnouncement() {

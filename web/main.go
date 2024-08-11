@@ -51,7 +51,6 @@ func main() {
 	http.HandleFunc("/admin", admin.AdminPanelHandler)
 	http.HandleFunc("/admin/save_announcement", admin.SaveAnnouncementHandler)
 	http.HandleFunc("/contact_us", contactUsHandler)
-	http.HandleFunc("/detail", search.DetailHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
 	http.HandleFunc("/get_my_list", search.GetMyListHandler)
 	http.HandleFunc("/list", listHandler)
@@ -63,11 +62,14 @@ func main() {
 	http.HandleFunc("/reset/password", registration.ResetPasswordHandler)
 	http.HandleFunc("/reset_password", registration.ResetPasswordSetHandler)
 	http.HandleFunc("/robots.txt", robotsTxtHandler)
-	http.HandleFunc("/search", search.SearchHandler)
 	http.HandleFunc("/add_to_list", update_list.AddToListHandler)
 	http.HandleFunc("/verify_email", login.VerifyHandler)
 	http.HandleFunc("/verify_email/resend", registration.ResendVerifyEmailHandler)
 	http.HandleFunc("/what_is_this", whatIsThisHandler)
+
+	// Set api routes
+	http.HandleFunc("/api/detail", search.DetailHandler)
+	http.HandleFunc("/api/search", search.SearchHandler)
 
 	// Start the token cleaner with a cleanup interval of 30 minute
 	go token.CleanExpiredTokens(30 * time.Minute)
