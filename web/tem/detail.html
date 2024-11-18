@@ -195,10 +195,15 @@
             <table>
                 <thead>
                     <tr>
-                        <th>科目</th>
-                        <th>檢定</th>
-                        <th>篩選倍率</th>
-                        <th>採計方式</th>
+                        <th rowspan="2" colspan="0">科目</th>
+                        <th rowspan="1" colspan="1">檢定</th>
+                        <th rowspan="1" colspan="1">篩選倍率</th>
+                        <th rowspan="1" colspan="1">採計方式</th>
+                    </tr>
+                    <tr>
+                        <th class="year-info"></th>
+                        <th class="year-info"></th>
+                        <th class="year-info"></th>
                     </tr>
                 </thead>
                 <tbody id="subjects"></tbody>
@@ -211,9 +216,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th>指定項目</th>
-                        <th>檢定</th>
-                        <th>比例</th>
+                        <th rowspan="2" colspan="0">指定項目</th>
+                        <th rowspan="1" colspan="1">檢定</th>
+                        <th rowspan="1" colspan="1">比例</th>
+                    </tr>
+                    <tr>
+                        <th class="year-info"></th>
+                        <th class="year-info"></th>
                     </tr>
                 </thead>
                 <tbody id="items"></tbody>
@@ -231,8 +240,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>招生名額</th>
-                            <th>正/備取情況</th>
+                            <th rowspan="1" colspan="1">招生名額</th>
+                            <th rowspan="1" colspan="1">正/備取情況</th>
+                        </tr>
+                        <tr>
+                            <th class="year-info"></th>
+                            <th class="year-info"></th>
                         </tr>
                     </thead>
                     <tbody id="candidates-info"></tbody>
@@ -324,21 +337,17 @@
             const dataTypeElement = document.getElementById('data-type');
             var formattedYearInfo = year_info.split('_year,');
 
-            var i = -1;
-            let yearInfo = data.map(d => {
-                i++;
-                if (d.subject_score_proportion === '') {
-                    return 'No Data';
-                } else {
-                    return formattedYearInfo[i];
-                }
-            }).join(' / ');
+            const yearInfoHeaders = document.querySelectorAll('.year-info');
 
-            if (yearInfo.endsWith('/')) {
-                yearInfo = yearInfo.slice(0, -1);
-            }
-
-            dataTypeElement.innerText = `資料樣態: ${yearInfo} (左⇨右, 上⇨下)`;
+            yearInfoHeaders.forEach(header => {
+                header.innerHTML = `
+                    <div class="multi-column">
+                        <div>${formattedYearInfo[0]}</div>
+                        <div>${formattedYearInfo[1]}</div>
+                        <div>${formattedYearInfo[2]}</div>
+                    </div>
+                `;
+            });
         }
 
         const candidatesInfo = document.getElementById('candidates-info');
